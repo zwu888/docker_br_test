@@ -1,0 +1,23 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  iperf3-server:
+    image: networkstatic/iperf3
+    command: -s
+    ports:
+      - "5201:5201"
+    networks:
+      - iperf3-net
+
+  iperf3-client:
+    image: networkstatic/iperf3
+    depends_on:
+      - iperf3-server
+    command: -c iperf3-server -t 30 -P 4
+    networks:
+      - iperf3-net
+
+networks:
+  iperf3-net:
+    driver: bridge
